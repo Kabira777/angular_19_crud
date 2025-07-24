@@ -27,9 +27,12 @@
                                     <td>{{item.emailID}}</td>
                                     <td class="text-center">
                                         <button class="btn btn-primary" (click)="onEdit(item);">Edit</button>
-                                    <button class="btn btn-danger mx-2 " (click)="onDelete();">Delete</button>
+                                    <button class="btn btn-danger mx-2 " (click)="onDelete(item.empId);">Delete</button>
                                     </td>
                                  </tr>
+                               }
+                               @empty{
+                                <h3>No Employees found</h3>
                                }
                             </tbody>
                         </table>
@@ -50,6 +53,13 @@
                     <div class="col-6">
                     <label for="">Name</label>
                     <input type="text" formControlName="name" class="form-control">
+                    <div class="text-danger">
+                      @if(employeeForm.controls['name'].touched){
+                        @if(employeeForm.controls['name'].errors?.['required']){
+                            <span>Name is required</span>
+                        }
+                      }
+                    </div>
                     </div>
                     <div class="col-6">
                     <label for="">Email-Id</label>
@@ -61,6 +71,16 @@
                     <div class="col-6">
                     <label for="">Contact No</label>
                     <input type="text" formControlName="contactNo" class="form-control">
+                    <div class="text-danger">
+                       @if(employeeForm.controls['contactNo'].touched){
+                        @if(employeeForm.controls['contactNo'].errors?.['required']){
+                            <span>Contact No. is required</span>
+                        }
+                         @if(employeeForm.controls['contactNo'].errors?.['maxlength']){
+                            <span>Max char length is 10</span>
+                        }
+                      }
+                    </div>
                     </div>
                     <div class="col-6">
                     <label for="">City</label>
@@ -76,6 +96,16 @@
                     <div class="col-6">
                     <label for="">Pin Code</label>
                     <input type="text" formControlName="pinCode" class="form-control">
+                    <div class="text-danger">
+                        @if(employeeForm.controls['pinCode'].touched){
+                            @if(employeeForm.controls['pinCode'].errors?.['required']){
+                                <span>Pin Code is required</span>
+                            }
+                             @if(employeeForm.controls['pinCode'].errors?.['minlength']){
+                                <span>Min 6 char required</span>
+                            }
+                        }
+                    </div>
                      </div>
                 </div>
                 
@@ -90,14 +120,14 @@
 
                 <div class="row pt-2">
                     <div class="col-6 text-center">
-                        <button class="btn btn-secondary">Reset</button>
+                        <button class="btn btn-secondary" type="button" (click)="resetForm();">Reset</button>
                     </div>
                     <div class="col-6 text-center">
-                        @if(employeeForm.controls['empId'].value=='1'){
-                            <button class="btn btn-success" (click)="onSave();">Save Employee</button>
+                        @if(employeeForm.controls['empId'].value=='0'){
+                            <button class="btn btn-success" [disabled]="employeeForm.invalid" (click)="onSave();">Save Employee</button>
                         }
                         @else {
-                            <button class="btn btn-warning" (click)="onUpdate()">Update Employee</button>
+                            <button class="btn btn-warning" [disabled]="employeeForm.invalid" (click)="onUpdate()">Update Employee</button>
                         }
                    
                     </div>
